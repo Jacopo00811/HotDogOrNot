@@ -363,8 +363,7 @@ print(f"Created a new Dataset for testing of length: {len(testset)}")
 all_combinations = create_combinations(hyperparameter_grid)
 # random_samples = sample_hyperparameters(hyperparameter_grid, 15)
 
-print(f"Number of combinations: {
-      len(all_combinations)} (amount of models to test)\n\n")
+print(f"Number of combinations: {len(all_combinations)} (amount of models to test)\n\n")
 best_hp = hyperparameter_search(hyperparameters["backbone"], loss_function, device, train_dataset,
                                 val_dataset, testset, all_combinations, hyperparameters, run_dir)
 results[hyperparameters["backbone"]] = best_hp
