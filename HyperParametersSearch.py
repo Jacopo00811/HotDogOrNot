@@ -259,16 +259,13 @@ def hyperparameter_search(modeltype, loss_function, device, dataset_train, datas
         # Initialize model, optimizer, scheduler, logger, dataloader
         dataloader_train = DataLoader(
             dataset_train, batch_size=hyper_parameters["batch size"], shuffle=True, num_workers=hyper_parameters["number of workers"], drop_last=False)
-        print(f"Created a new Dataloader for training with batch size: {
-              hyper_parameters["batch size"]}")
+        print(f"Created a new Dataloader for training with batch size: {hyper_parameters["batch size"]}")
         dataloader_validation = DataLoader(
             dataset_validation, batch_size=hyper_parameters["batch size"], shuffle=False, num_workers=hyper_parameters["number of workers"], drop_last=False)
-        print(f"Created a new Dataloader for validation with batch size: {
-              hyper_parameters["batch size"]}")
+        print(f"Created a new Dataloader for validation with batch size: {hyper_parameters["batch size"]}")
         dataloader_test = DataLoader(
             dataset_test, batch_size=hyper_parameters["batch size"], shuffle=False, num_workers=hyper_parameters["number of workers"], drop_last=False)
-        print(f"Created a new Dataloader for testing with batch size: {
-              hyper_parameters['batch size']}")
+        print(f"Created a new Dataloader for testing with batch size: {hyper_parameters['batch size']}")
 
         log_dir = os.path.join(modeltype_directory, f'run_{str(run_counter)}_{hyper_parameters["network name"]}_{
                                hyper_parameters["optimizer"]}_Scheduler_{hyper_parameters["scheduler"]}')
