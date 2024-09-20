@@ -309,7 +309,7 @@ hyperparameters = {
     "device": device,
     "image size": (224, 224),
     "backbone": "mobilenet_v3_large",
-    "torch home": "\\zhome\\f9\\0\\168881\\Desktop\\DeepLearningCV\\TorchvisionModels",
+    "torch home": "zhome/f9/0/168881/Desktop/DeepLearningCV/TorchvisionModels",
     # "C:\\Users\\jacop\\Desktop\\DTU\\Intro_to_Deep_Learning_in_Computer_Vision\\Exercises\\Project_1\\HotDogOrNot\\TorchvisionModels",
     "network name": "Test",
     "beta1": 0.9, # Default values for Adam

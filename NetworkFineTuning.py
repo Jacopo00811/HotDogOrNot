@@ -18,7 +18,7 @@ from sklearn.metrics import confusion_matrix
 
 
 class Hotdog_NotHotdog(torch.utils.data.Dataset):
-    def __init__(self, train, transforms, data_path="HotDogOrNot\\Data"): # 'Exercises\\data\\hotdog_nothotdog'
+    def __init__(self, train, transforms, data_path="HotDogOrNot/Data"): # 'Exercises\\data\\hotdog_nothotdog'
         'Initialization'
         self.transforms = transforms
         data_path = os.path.join(data_path, 'train' if train else 'test')
