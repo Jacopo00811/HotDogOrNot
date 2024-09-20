@@ -131,8 +131,7 @@ def train_net(model, loss_function, device, dataloader_train, dataloader_validat
 
             logger.add_scalar(f'Train loss_{state}', loss_train.item(
             ), epoch*len(dataloader_train)+train_iteration)
-            logger.add_scalar(f'Train accuracy_{
-                              state}', train_accuracy, epoch*len(dataloader_train)+train_iteration)
+            logger.add_scalar(f'Train accuracy_{state}', train_accuracy, epoch*len(dataloader_train)+train_iteration)
         all_train_losses.append(sum(train_losses)/len(train_losses))
         all_accuracies.append(sum(accuracies)/len(accuracies))
 
