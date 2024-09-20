@@ -367,6 +367,6 @@ print(f"Number of combinations: {len(all_combinations)} (amount of models to tes
 best_hp = hyperparameter_search(hyperparameters["backbone"], loss_function, device, train_dataset,
                                 val_dataset, testset, all_combinations, hyperparameters, run_dir)
 results[hyperparameters["backbone"]] = best_hp
-print(f"Best hyperparameters for {hyperparameters["backbone"]}: {best_hp}")
+print(f"Best hyperparameters for {hyperparameters['backbone']}: {best_hp}")
 
 print(f"\n\nResults: {results}")
