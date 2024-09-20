@@ -18,7 +18,7 @@ from sklearn.metrics import confusion_matrix
 
 
 class Hotdog_NotHotdog(torch.utils.data.Dataset):
-    def __init__(self, train, transforms, data_path='..\\..\\data\\hotdog_nothotdog'):
+    def __init__(self, train, transforms, data_path="HotDogOrNot\\Data"): # 'Exercises\\data\\hotdog_nothotdog'
         'Initialization'
         self.transforms = transforms
         data_path = os.path.join(data_path, 'train' if train else 'test')
@@ -61,9 +61,9 @@ class MultiModel(nn.Module):
 
     def __init__(self, backbone, hyperparameters, load_pretrained=False):
         super().__init__()
-        assert backbone in hyperparameters["backbones"], f"Invalid backbone: {
+        assert backbone in hyperparameters["backbone"], f"Invalid backbone: {
             backbone}"
-        self.backbone = hyperparameters["backbones"][0]
+        self.backbone = hyperparameters["backbone"]
         self.pretrained_model = None
         self.classifier_layers = []
         self.new_layers = []
@@ -267,7 +267,6 @@ def check_accuracy(model, dataloader, DEVICE, save_dir=None):
             num_samples += predictions.size(0)
             y_pred.extend(predictions.cpu().tolist())  # Save Prediction
             label = label.data.cpu().numpy()
-
             y_true.extend(label)  # Save Truth
 
             misclassified_mask = predictions != torch.tensor(
@@ -384,80 +383,3 @@ def Train_net_wrapper(device, which_layers, loss_function, dataloader_train, dat
             train_net(model, loss_function, device, dataloader_train,
                       dataloader_validation, optimizer, new_hp, logger, scheduler, state=which_layers, name=new_hp["network name"])
             print(f"\nFinished training {which_layers}!\n")
-
-
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-print("Current working directory:", os.getcwd())
-
-hyperparameters = {
-    "number of classes": 2,
-    "device": device,
-    "epochs": [1, 1, 1],
-    "batch size": 6,
-    "learning rate": [0.001, 0.0001, 0.00001],
-    "number of epochs": 3,
-    "image size": (224, 224),
-    "backbones": "mobilenet_v3_large",
-    "torch home": "C:\\Users\\jacop\\Desktop\\DTU\\Intro_to_Deep_Learning_in_Computer_Vision\\Exercises\\Project_1\\HotDogOrNot\\TorchvisionModels",
-    "network name": "Mads",
-    "momentum": 0.9,
-    "weight decay": 0.0005,
-    "optimizer": "SGD",
-    "scheduler": "No",
-    "beta1": 0.9,
-    "beta2": 0.999,
-    "epsilon": 1e-08,
-    "step size": [1, 1, 1],
-    "gamma": [0.1, 0.1, 0.1],
-}
-
-train_transform = transformsV2.Compose([transformsV2.Resize(hyperparameters["image size"]),
-                                        transformsV2.RandomVerticalFlip(p=0.5),
-                                        transformsV2.RandomHorizontalFlip(
-                                            p=0.5),
-                                        transformsV2.RandomAdjustSharpness(
-                                            sharpness_factor=2, p=0.5),
-                                        transformsV2.RandomAutocontrast(p=0.5),
-                                        transformsV2.ColorJitter(
-                                            brightness=0.25, saturation=0.20),
-                                        # Replace deprecated ToTensor()
-                                        transformsV2.ToImage(),
-                                        transformsV2.ToDtype(torch.float32, scale=True)])
-test_transform = transformsV2.Compose([transformsV2.Resize(hyperparameters["image size"]),
-                                       # Replace deprecated ToTensor()
-                                       transformsV2.ToImage(),
-                                       transformsV2.ToDtype(torch.float32, scale=True)])
-
-
-trainset = Hotdog_NotHotdog(train=True, transforms=train_transform)
-
-# Define the sizes for train and validation splits
-train_size = int(0.8 * len(trainset))  # 80% for training
-val_size = len(trainset) - train_size   # 20% for validation
-
-# Split the train dataset into train and val
-train_dataset, val_dataset = random_split(trainset, [train_size, val_size])
-# TODO: Check if this is correct (I think it applies the transofrmations before splitting)
-val_dataset.dataset.set_transforms(test_transform)
-
-train_loader = DataLoader(
-    train_dataset, batch_size=hyperparameters["batch size"], shuffle=True)
-val_loader = DataLoader(
-    val_dataset, batch_size=hyperparameters["batch size"], shuffle=False)
-testset = Hotdog_NotHotdog(train=False, transforms=test_transform)
-test_loader = DataLoader(testset, batch_size=hyperparameters["batch size"],
-                         shuffle=False)
-
-
-os.environ['TORCH_HOME'] = hyperparameters["torch home"]
-os.makedirs(hyperparameters["torch home"], exist_ok=True)
-
-# Define the loss function
-loss_function = nn.CrossEntropyLoss()
-
-# Empty memory before start
-if torch.cuda.is_available():
-    torch.cuda.empty_cache()
-
-automatic_fine_tune(hyperparameters, "mobilenet_v3_large", device,
-                    loss_function, train_loader, val_loader, test_loader, hyperparameters["optimizer"], hyperparameters["scheduler"])
