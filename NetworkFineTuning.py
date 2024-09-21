@@ -262,20 +262,19 @@ def check_accuracy(model, dataloader, DEVICE, save_dir=None):
             scores = model(image)
 
             _, predictions = scores.max(1)
-            num_correct += (predictions == label).sum()
-
+            num_correct += (predictions == label).sum().item()
             num_samples += predictions.size(0)
-            y_pred.extend(predictions.cpu().tolist())  # Save Prediction
-            label = label.data.cpu().numpy()
-            y_true.extend(label)  # Save Truth
+            
+            # Save predictions and labels
+            y_pred.extend(predictions.cpu().tolist())
+            y_true.extend(label.cpu().tolist())
 
-            misclassified_mask = predictions != torch.tensor(
-                label, device=predictions.device)
-            if misclassified_mask.any():  # Check if there are any misclassified images
+            # Find misclassified examples
+            misclassified_mask = predictions != label
+            if misclassified_mask.any():
                 misclassified_images = image[misclassified_mask].cpu()
                 misclassified_labels = label[misclassified_mask].cpu().numpy()
-                misclassified_predictions = predictions[misclassified_mask].cpu(
-                ).numpy()
+                misclassified_predictions = predictions[misclassified_mask].cpu().numpy()
 
                 # Append only misclassified examples
                 misclassified.extend(
