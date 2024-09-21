@@ -175,12 +175,19 @@ def train_net(model, loss_function, device, dataloader_train, dataloader_validat
             scheduler.step()
             print(f"Current learning rate: {scheduler.get_last_lr()}")
 
-    # logger.add_hparams(
-    #     {f"Step_size_{state}": scheduler.step_size, f'Batch_size_{state}': hyper_parameters["batch size"], f'Gamma_{state}': hyper_parameters["gamma"], f'Epochs_{state}': hyper_parameters["epochs"]},
-    #     {f'Avg train loss': sum(all_train_losses)/len(all_train_losses),
-    #         f'Avg accuracy': sum(all_accuracies)/len(all_accuracies),
-    #         f'Avg val loss': sum(all_val_losses)/len(all_val_losses)}
-    # )
+    logger.add_hparams(
+        {f"Step_size_{state}": scheduler.step_size, f'Batch_size_{state}': hyper_parameters["batch size"], f'Gamma_{state}': hyper_parameters["gamma"], f'Epochs_{state}': hyper_parameters["epochs"]},
+        {f'Avg train loss': sum(all_train_losses)/len(all_train_losses),
+            f'Avg accuracy': sum(all_accuracies)/len(all_accuracies),
+            f'Avg val loss': sum(all_val_losses)/len(all_val_losses)}
+    )
+
+    logger.add_hparams(
+        {f"Step_size_{state}": scheduler.step_size, f'Batch_size_{state}': hyper_parameters["batch size"], f'Optimizer_{state}': hyper_parameters["optimizer"], f'Scheduler_{state}': hyper_parameters["scheduler"], f'LR_{state}': hyper_parameters["learning rate"]},
+        {f'Avg train loss': sum(all_train_losses)/len(all_train_losses),
+            f'Avg accuracy': sum(all_accuracies)/len(all_accuracies),
+            f'Avg val loss': sum(all_val_losses)/len(all_val_losses)}
+    )
 
 
 def automatic_fine_tune(logger, hyper_parameters, modeltype, device, loss_function, dataloader_train, dataloader_validation, dataloader_test, directory):
@@ -306,24 +313,24 @@ hyperparameters = {
     "backbone": "mobilenet_v3_large",
     "torch home": "TorchvisionModels",
     # "C:\\Users\\jacop\\Desktop\\DTU\\Intro_to_Deep_Learning_in_Computer_Vision\\Exercises\\Project_1\\HotDogOrNot\\TorchvisionModels",
-    "network name": "Test",
+    "network name": "Test_2",
     "beta1": 0.9, # Default values for Adam
     "beta2": 0.999, # Default values for Adam
     "epsilon": 1e-08, # Default values for Adam
     "number of workers": 0, 
+    "momentum": 0.9,
+    "weight decay": 0.0005,
+    'gamma': [0.8, 0.9, 0.7],
+    "epochs": [15, 10, 5],
 }
 
 # Define your hyperparameter grid
 hyperparameter_grid = {
-    'learning rate': [[1e-2, 1e-3, 1e-4], [1e-3, 1e-4, 1e-5]],
-    'gamma': [[0.8, 0.9, 0.7], [0.1, 0.8, 0.7]],
+    'learning rate': [[1e-1, 1e-2, 1e-3], [1e-2, 1e-3, 1e-4], [1e-3, 1e-4, 1e-5]],
     "optimizer": ["SGD", "Adam"],
     "scheduler": ["Yes", "No"],
-    "weight decay": [0.0005, 0],
-    'batch size': [64],
-    "epochs": [[15, 10, 5]], # Keep this fixed for reference
+    'batch size': [32, 64],
     'step size': [[5, 5, 2], [3, 3, 2]],
-    "momentum": [0.9, 0],
 }
 
 train_transform = transformsV2.Compose([transformsV2.Resize(hyperparameters["image size"]),
