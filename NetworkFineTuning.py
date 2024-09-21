@@ -237,7 +237,7 @@ def save_misclassified_images(misclassified, save_dir):
             image = rescale_0_1(images)
             image = TF.to_pil_image(image)
             # Naming format: misclassified_<index>_true_<true label>_predicted_<predicted label>.png
-            image_name = f"misclassified_{idx}_true_lable_{
+            image_name = f"misclassified_{idx}_true_label_{
                 labels}_predicted_label_{predictions}.png"
             image_path = os.path.join(save_dir, image_name)
             image.save(image_path)

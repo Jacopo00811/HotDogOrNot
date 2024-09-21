@@ -177,14 +177,14 @@ def train_net(model, loss_function, device, dataloader_train, dataloader_validat
 
     if scheduler is not None:
         logger.add_hparams(
-            {f"Step_size_{state}": scheduler.step_size, f'Batch_size_{state}': hyper_parameters["batch size"], f'Optimizer_{state}': hyper_parameters["optimizer"], f'Scheduler_{state}': hyper_parameters["scheduler"], f'LR_{state}': hyper_parameters["learning rate"]},
+            {f"Step_size_{state}": scheduler.step_size, f'Batch_size_{state}': hyper_parameters["batch size"], f'Optimizer_{state}': hyper_parameters["optimizer"], f'Scheduler_{state}': hyper_parameters["scheduler"], f'LR1_{state}': hyper_parameters["learning rate"][0], f'LR2_{state}': hyper_parameters["learning rate"][1], f'LR3_{state}': hyper_parameters["learning rate"][2]},
             {f'Avg train loss': sum(all_train_losses)/len(all_train_losses),
                 f'Avg accuracy': sum(all_accuracies)/len(all_accuracies),
                 f'Avg val loss': sum(all_val_losses)/len(all_val_losses)}
         )
     else:
         logger.add_hparams(
-            {f"Step_size_{state}": "None", f'Batch_size_{state}': hyper_parameters["batch size"], f'Optimizer_{state}': hyper_parameters["optimizer"], f'Scheduler_{state}': hyper_parameters["scheduler"], f'LR_{state}': hyper_parameters["learning rate"]},
+            {f"Step_size_{state}": "None", f'Batch_size_{state}': hyper_parameters["batch size"], f'Optimizer_{state}': hyper_parameters["optimizer"], f'Scheduler_{state}': hyper_parameters["scheduler"], f'LR1_{state}': hyper_parameters["learning rate"][0], f'LR2_{state}': hyper_parameters["learning rate"][1], f'LR3_{state}': hyper_parameters["learning rate"][2]},
             {f'Avg train loss': sum(all_train_losses)/len(all_train_losses),
                 f'Avg accuracy': sum(all_accuracies)/len(all_accuracies),
                 f'Avg val loss': sum(all_val_losses)/len(all_val_losses)}
@@ -322,16 +322,16 @@ hyperparameters = {
     "momentum": 0.9,
     "weight decay": 0.0005,
     'gamma': [0.8, 0.9, 0.7],
-    "epochs": [15, 10, 5],
+    "scheduler": "Yes",
+    "optimizer": "Adam",
+    'learning rate': [1e-3, 1e-4, 1e-5],
 }
 
 # Define your hyperparameter grid
 hyperparameter_grid = {
-    'learning rate': [[1e-1, 1e-2, 1e-3], [1e-2, 1e-3, 1e-4], [1e-3, 1e-4, 1e-5]],
-    "optimizer": ["SGD", "Adam"],
-    "scheduler": ["Yes", "No"],
-    'batch size': [32, 64],
-    'step size': [[5, 5, 2], [3, 3, 2]],
+    'batch size': [32, 64, 128],
+    'step size': [[5, 5, 2], [3, 3, 2], [5, 5, 3]],
+    "epochs": [[20, 20, 15], [15, 15, 10], [10, 10, 5]],
 }
 
 train_transform = transformsV2.Compose([transformsV2.Resize(hyperparameters["image size"]),
