@@ -175,19 +175,20 @@ def train_net(model, loss_function, device, dataloader_train, dataloader_validat
             scheduler.step()
             print(f"Current learning rate: {scheduler.get_last_lr()}")
 
-    logger.add_hparams(
-        {f"Step_size_{state}": scheduler.step_size, f'Batch_size_{state}': hyper_parameters["batch size"], f'Gamma_{state}': hyper_parameters["gamma"], f'Epochs_{state}': hyper_parameters["epochs"]},
-        {f'Avg train loss': sum(all_train_losses)/len(all_train_losses),
-            f'Avg accuracy': sum(all_accuracies)/len(all_accuracies),
-            f'Avg val loss': sum(all_val_losses)/len(all_val_losses)}
-    )
-
-    logger.add_hparams(
-        {f"Step_size_{state}": scheduler.step_size, f'Batch_size_{state}': hyper_parameters["batch size"], f'Optimizer_{state}': hyper_parameters["optimizer"], f'Scheduler_{state}': hyper_parameters["scheduler"], f'LR_{state}': hyper_parameters["learning rate"]},
-        {f'Avg train loss': sum(all_train_losses)/len(all_train_losses),
-            f'Avg accuracy': sum(all_accuracies)/len(all_accuracies),
-            f'Avg val loss': sum(all_val_losses)/len(all_val_losses)}
-    )
+    if scheduler is not None:
+        logger.add_hparams(
+            {f"Step_size_{state}": scheduler.step_size, f'Batch_size_{state}': hyper_parameters["batch size"], f'Optimizer_{state}': hyper_parameters["optimizer"], f'Scheduler_{state}': hyper_parameters["scheduler"], f'LR_{state}': hyper_parameters["learning rate"]},
+            {f'Avg train loss': sum(all_train_losses)/len(all_train_losses),
+                f'Avg accuracy': sum(all_accuracies)/len(all_accuracies),
+                f'Avg val loss': sum(all_val_losses)/len(all_val_losses)}
+        )
+    else:
+        logger.add_hparams(
+            {f"Step_size_{state}": "None", f'Batch_size_{state}': hyper_parameters["batch size"], f'Optimizer_{state}': hyper_parameters["optimizer"], f'Scheduler_{state}': hyper_parameters["scheduler"], f'LR_{state}': hyper_parameters["learning rate"]},
+            {f'Avg train loss': sum(all_train_losses)/len(all_train_losses),
+                f'Avg accuracy': sum(all_accuracies)/len(all_accuracies),
+                f'Avg val loss': sum(all_val_losses)/len(all_val_losses)}
+        )        
 
 
 def automatic_fine_tune(logger, hyper_parameters, modeltype, device, loss_function, dataloader_train, dataloader_validation, dataloader_test, directory):
