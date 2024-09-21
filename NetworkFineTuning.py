@@ -272,8 +272,8 @@ def check_accuracy(model, dataloader, DEVICE, save_dir=None):
             misclassified_mask = predictions != torch.tensor(
                 label, device=predictions.device)
             if misclassified_mask.any():  # Check if there are any misclassified images
-                misclassified_images = image[misclassified_mask]
-                misclassified_labels = label[misclassified_mask]
+                misclassified_images = image[misclassified_mask].cpu()
+                misclassified_labels = label[misclassified_mask].cpu().numpy()
                 misclassified_predictions = predictions[misclassified_mask].cpu(
                 ).numpy()
 
