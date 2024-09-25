@@ -14,7 +14,7 @@ hyperparameters = {
     "image size": (224, 224),
     "backbone": "mobilenet_v3_large",
     "torch home": "TorchvisionModels",
-    "network name": "FirstRun",
+    "network name": "SecondRun",
     "momentum": 0.9,
     "weight decay": 0.0005,
     "optimizer": "Adam",
@@ -26,18 +26,24 @@ hyperparameters = {
     "gamma": [0.8, 0.9, 0.7],
 }
 
+# train_transform = transformsV2.Compose([transformsV2.Resize(hyperparameters["image size"]),
+#                                         transformsV2.RandomVerticalFlip(p=0.5),
+#                                         transformsV2.RandomHorizontalFlip(
+#                                             p=0.5),
+#                                         transformsV2.RandomAdjustSharpness(
+#                                             sharpness_factor=2, p=0.5),
+#                                         transformsV2.RandomAutocontrast(p=0.5),
+#                                         transformsV2.ColorJitter(
+#                                             brightness=0.25, saturation=0.20),
+#                                         # Replace deprecated ToTensor()
+#                                         transformsV2.ToImage(),
+#                                         transformsV2.ToDtype(torch.float32, scale=True)])
 train_transform = transformsV2.Compose([transformsV2.Resize(hyperparameters["image size"]),
-                                        transformsV2.RandomVerticalFlip(p=0.5),
-                                        transformsV2.RandomHorizontalFlip(
-                                            p=0.5),
-                                        transformsV2.RandomAdjustSharpness(
-                                            sharpness_factor=2, p=0.5),
-                                        transformsV2.RandomAutocontrast(p=0.5),
-                                        transformsV2.ColorJitter(
-                                            brightness=0.25, saturation=0.20),
                                         # Replace deprecated ToTensor()
                                         transformsV2.ToImage(),
                                         transformsV2.ToDtype(torch.float32, scale=True)])
+
+
 test_transform = transformsV2.Compose([transformsV2.Resize(hyperparameters["image size"]),
                                        # Replace deprecated ToTensor()
                                        transformsV2.ToImage(),
