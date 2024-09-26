@@ -82,7 +82,7 @@ def plot_smoothgrad_saliency_maps(model, images, noise_levels, n_samples=50):
             smooth_grad = smoothgrad_saliency(model, image, target_class, n_samples=n_samples, noise_level=noise_level)
             ax[i, j+1].imshow(smooth_grad.detach().numpy(), cmap=plt.cm.hot, aspect='auto')
             ax[i, j+1].axis('off')
-            ax[i, j+1].set_title(f'SmoothGrad (noise {noise_level}) Image {i+1}', fontweight="bold")
+            ax[i, j+1].set_title(f'SmoothGrad (noise {noise_level*100}%) Image {i+1}', fontweight="bold")
     plt.suptitle("SmoothGrad saliency maps for different noise levels", fontsize=20, fontweight="bold", color="red")
     plt.tight_layout()
     plt.show()
