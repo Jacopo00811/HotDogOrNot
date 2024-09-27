@@ -102,7 +102,7 @@ image2 = test_transform(image2)
 
 images = [image1, image2]
 
-noise_levels = [0.1, 0.05, 0.01]
+noise_levels = [0.2, 0.1]
 
 
 plot_vanilla_saliency_maps(model, images)
